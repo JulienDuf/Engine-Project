@@ -6,14 +6,14 @@ private:
 	GLFWwindow* window;
 public:
 
-	Window(int w, int h, const char* nom) {
+	Window(int w, int h, const char* name) {
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		window = glfwCreateWindow(w, h, nom, NULL, NULL);
+		window = glfwCreateWindow(w, h, name, NULL, NULL);
 		glfwMakeContextCurrent(window);
 
 	}
