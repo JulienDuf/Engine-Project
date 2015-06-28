@@ -34,6 +34,4 @@ public:
 	}
 
 	virtual void reactToEvent(SDL_Event*) = 0;
-
-	virtual void show() = 0;
 };

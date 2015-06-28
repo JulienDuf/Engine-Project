@@ -26,6 +26,8 @@ public:
 		this->text = text;
 		this->position = position;
 		this->background = nullptr;
+
+		RenderManager::getInstance().addObject(text);
 	}
 
 	Label(Text* text, Image* background, Vecteur2f position) : Label() {
@@ -33,13 +35,20 @@ public:
 		this->text = text;
 		this->position = position;
 		this->background = background;
+
+		RenderManager::getInstance().addObject(text);
+		RenderManager::getInstance().addObject(background);
 	}
 
 	~Label() {
-		delete background;
-		delete text;
 
 		EventManager::getInstance().removeObject(this);
+		RenderManager::getInstance().removeObject(text);
+		if (background != nullptr)
+			RenderManager::getInstance().removeObject(background);
+
+		delete background;
+		delete text;
 	}
 
 	void reactToEvent(SDL_Event* event) {
@@ -56,13 +65,5 @@ public:
 			checkReaction(event->type);
 		else if (event->type != SDL_MOUSEBUTTONDOWN && event->type != SDL_MOUSEBUTTONUP)
 			checkReaction(event->type);
-	}
-
-	void show() {
-
-		if (background != nullptr)
-			background->show();
-
-		text->show();
 	}
 };

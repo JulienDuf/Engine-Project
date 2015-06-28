@@ -28,6 +28,8 @@ public:
 		this->position = position;
 		buttonState = DEFAULT;
 		buttonRect = Rectf(this->position.x, this->position.y, this->buttonTextures->getWidth(), this->buttonTextures->getHeight());
+
+		RenderManager::getInstance().addObject(buttonTextures);
 	}
 	
 	Button(Sprite* textures, Vecteur2f position, const char* textOnButton, Font* font, SDL_Color color) : Button() {
@@ -46,6 +48,8 @@ public:
 		}
 		buttonTextures->getTexture()->changeSurface(surface);
 		buttonRect = Rectf(this->position.x, this->position.y, this->buttonTextures->getWidth(), this->buttonTextures->getHeight());
+
+		RenderManager::getInstance().addObject(buttonTextures);
 	}
 
 	Button(Vecteur2f position, const char* buttonText, Font* font, SDL_Color defaultColor, SDL_Color ovreflownColor, SDL_Color clickedColor) : Button() {
@@ -72,17 +76,16 @@ public:
 		this->position = position;
 		buttonState = DEFAULT;
 		buttonRect = Rectf(this->position.x, this->position.y, this->buttonTextures->getWidth(), this->buttonTextures->getHeight());
+
+		RenderManager::getInstance().addObject(buttonTextures);
 	}
 
 	~Button() {
 
 		delete buttonTextures;
 
-		EventManager::getInstance().addObject(this);
-	}
-
-	void show() {
-		buttonTextures->show();
+		EventManager::getInstance().removeObject(this);
+		RenderManager::getInstance().removeObject(buttonTextures);
 	}
 
 	void reactToEvent(SDL_Event* event) {
