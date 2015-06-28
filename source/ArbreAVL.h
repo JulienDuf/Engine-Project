@@ -4,6 +4,100 @@
 
 template <class Clef, class T>
 
+class NoeudArbreAVL {
+private:
+
+	NoeudArbreAVL<Clef, T>* parent;
+	NoeudArbreAVL<Clef, T>* EG;
+	NoeudArbreAVL<Clef, T>* ED;
+	T element;
+	Clef ID;
+
+	int indiceEquilibre;
+
+public:
+
+	NoeudArbreAVL(Clef ID, T element, NoeudArbreAVL<Clef, T>* _Parent){
+
+		parent = _Parent;
+		ED = nullptr;
+		EG = nullptr;
+
+		this->element = element;
+		this->ID = ID;
+		indiceEquilibre = 0;
+	}
+
+	NoeudArbreAVL(Clef ID, NoeudArbreAVL<Clef, T>* _Parent){
+
+		parent = _Parent;
+		ED = nullptr;
+		EG = nullptr;
+
+		this->element = NULL;
+		this->ID = ID;
+		indiceEquilibre = 0;
+	}
+
+	void defenirParent(NoeudArbreAVL<Clef, T>* parent) {
+
+		this->parent = parent;
+	}
+
+	void defED(NoeudArbreAVL<Clef, T>* ED) {
+
+		this->ED = ED;
+	}
+
+	void defEG(NoeudArbreAVL<Clef, T>* EG) {
+
+		this->EG = EG;
+	}
+
+	void defElement(T element) {
+
+		this->element = element;
+	}
+
+	void defIndice(int indice) {
+
+		indiceEquilibre = indice;
+	}
+
+	NoeudArbreAVL<Clef, T>* obtParent() {
+
+		return parent;
+	}
+
+	NoeudArbreAVL<Clef, T>* obtED() {
+
+		return ED;
+	}
+
+	NoeudArbreAVL<Clef, T>* obtEG() {
+
+		return EG;
+	}
+
+	T& obtElement() {
+
+		return element;
+	}
+
+	Clef& obtID() {
+
+		return ID;
+	}
+
+	int obtIndice() {
+
+		return indiceEquilibre;
+	}
+
+};
+
+template <class Clef, class T>
+
 class ArbreAVL {
 private:
 
@@ -41,7 +135,7 @@ private:
 		if (racine == nullptr) {
 			racine = new NoeudArbreAVL<Clef, T>(ID, nullptr);
 			modifierIndice(racine, false);
-			compte++;
+			++compte;
 			return racine->obtElement();
 		}
 
@@ -51,7 +145,7 @@ private:
 
 			if (noeud->obtID() != ID){
 
-				compte++;
+				++compte;
 				if (noeud->obtID() > ID) {
 					noeud->defEG(new NoeudArbreAVL<Clef, T>(ID, noeud));
 					noeud = noeud->obtEG();
@@ -414,99 +508,5 @@ public:
 
 		 return compte;
 	 }
-
-};
-
-template <class Clef, class T>
-
-class NoeudArbreAVL {
-private:
-
-	NoeudArbreAVL<Clef, T>* parent;
-	NoeudArbreAVL<Clef, T>* EG;
-	NoeudArbreAVL<Clef, T>* ED;
-	T element;
-	Clef ID;
-
-	int indiceEquilibre;
-
-public:
-
-	NoeudArbreAVL(Clef ID, T element, NoeudArbreAVL<Clef, T>* _Parent){
-
-		parent = _Parent;
-		ED = nullptr;
-		EG = nullptr;
-
-		this->element = element;
-		this->ID = ID;
-		indiceEquilibre = 0;
-	}
-
-	NoeudArbreAVL(Clef ID, NoeudArbreAVL<Clef, T>* _Parent){
-
-		parent = _Parent;
-		ED = nullptr;
-		EG = nullptr;
-
-		this->element = NULL;
-		this->ID = ID;
-		indiceEquilibre = 0;
-	}
-
-	void defenirParent(NoeudArbreAVL<Clef, T>* parent) {
-
-		this->parent = parent;
-	}
-
-	void defED(NoeudArbreAVL<Clef, T>* ED) {
-
-		this->ED = ED;
-	}
-
-	void defEG(NoeudArbreAVL<Clef, T>* EG) {
-
-		this->EG = EG;
-	}
-
-	void defElement(T element) {
-
-		this->element = element;
-	}
-
-	void defIndice(int indice) {
-
-		indiceEquilibre = indice;
-	}
-
-	NoeudArbreAVL<Clef, T>* obtParent() {
-
-		return parent;
-	}
-
-	NoeudArbreAVL<Clef, T>* obtED() {
-
-		return ED;
-	}
-
-	NoeudArbreAVL<Clef, T>* obtEG() {
-
-		return EG;
-	}
-
-	T& obtElement() {
-
-		return element;
-	}
-
-	Clef& obtID() {
-
-		return ID;
-	}
-
-	int obtIndice() {
-
-		return indiceEquilibre;
-	}
 
 };
