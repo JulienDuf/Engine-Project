@@ -17,12 +17,12 @@ public:
 
 	}
 
-	void show() {
+	void show(int w, int h) {
 
 		glDisable(GL_DEPTH_TEST);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, RessourceManager::getInstance().window->getSize().x, RessourceManager::getInstance().window->getSize().y, 0, -1, 1);
+		glOrtho(0, w, h, 0, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 
 		glPushMatrix();

@@ -9,7 +9,6 @@ private:
 
 	Image* background;
 	Text* text;
-	Vecteur2f position;
 
 public:
 
@@ -21,23 +20,29 @@ public:
 		EventManager::getInstance().addObject(this);
 	}
 
-	Label(Text* text, Vecteur2f position) : Label() {
+	Label(Text* text) : Label() {
 
 		this->text = text;
-		this->position = position;
+		this->position = text->getPosition();
 		this->background = nullptr;
 
 		RenderManager::getInstance().addObject(text);
 	}
 
-	Label(Text* text, Image* background, Vecteur2f position) : Label() {
+	Label(Text* text, Image* background) : Label() {
 
 		this->text = text;
-		this->position = position;
+		this->position = background->getPosition();
 		this->background = background;
-
 		RenderManager::getInstance().addObject(text);
 		RenderManager::getInstance().addObject(background);
+
+		Vecteur2f pos;
+
+		pos.x = background->getPosition().x + (background->getTexture()->getSurface()->w - text->getTexture()->getSurface()->w) / 2;
+		pos.y = background->getPosition().y + (background->getTexture()->getSurface()->h - text->getTexture()->getSurface()->h) / 2;
+		text->setPosition(pos);
+
 	}
 
 	~Label() {
@@ -51,7 +56,7 @@ public:
 		delete text;
 	}
 
-	void reactToEvent(SDL_Event* event) {
+	bool reactToEvent(SDL_Event* event) {
 
 		Rectf rectTmp;
 
@@ -61,9 +66,33 @@ public:
 		else
 			rectTmp = Rectf(position.x, position.y, text->getTexture()->getSurface()->w, text->getTexture()->getSurface()->h);
 
-		if (rectTmp.contient(event->button.x, event->button.y))
-			checkReaction(event->type);
+		if (rectTmp.contain(event->button.x, event->button.y))
+			return checkReaction(event->type);
 		else if (event->type != SDL_MOUSEBUTTONDOWN && event->type != SDL_MOUSEBUTTONUP)
-			checkReaction(event->type);
+			return checkReaction(event->type);
+
+		return false;
+	}
+
+	void setText(Text* text) {
+
+		RenderManager::getInstance().removeObject(this->text);
+		delete this->text;
+		this->text = text;
+		RenderManager::getInstance().addObject(this->text);
+
+		Vecteur2f pos;
+
+		pos.x = background->getPosition().x + (background->getTexture()->getSurface()->w - text->getTexture()->getSurface()->w) / 2;
+		pos.y = background->getPosition().y + (background->getTexture()->getSurface()->h - text->getTexture()->getSurface()->h) / 2;
+		text->setPosition(pos);
+	}
+
+	void setBackground(Image* background) {
+
+		RenderManager::getInstance().removeObject(this->background);
+		delete this->background;
+		this->background = background;
+		RenderManager::getInstance().addObject(this->background);
 	}
 };

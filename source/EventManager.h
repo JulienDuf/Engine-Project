@@ -37,7 +37,8 @@ public:
 		while (SDL_PollEvent(event)) {
 
 			for (auto it : objects)
-				it->reactToEvent(event);
+				if (it->reactToEvent(event))
+					return;
 
 			Event::update(event);
 		}

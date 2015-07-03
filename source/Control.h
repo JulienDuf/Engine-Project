@@ -8,7 +8,15 @@ private:
 
 	std::map<Uint32, void(*)(Control*)> reactions;
 
+protected:
+
+	Vecteur2f position;
+
 public:
+
+	virtual ~Control() {
+
+	}
 
 	bool addReaction(Uint32 type, void reaction(Control*)) {
 		if (reactions.find(type) == reactions.end()) {
@@ -29,9 +37,14 @@ public:
 	bool checkReaction(Uint32 type) {
 		if (reactions.find(type) != reactions.end()) {
 			reactions[type](this);
+			return true;
 		}
 		return false;
 	}
 
-	virtual void reactToEvent(SDL_Event*) = 0;
+	Vecteur2f getPosition() {
+		return position;
+	}
+
+	virtual bool reactToEvent(SDL_Event*) = 0;
 };

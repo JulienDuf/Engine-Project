@@ -14,20 +14,24 @@ public:
 		this->x = x;
 	}
 
-	bool contient(T x, T y){
+	bool contain(T x, T y){
 		bool estDansX = x >= this->x && x <= (this->x + this->w);
 		bool estDansY = y >= this->y && y <= (this->y + this->h);
 		return estDansX && estDansY;
 	}
 
-	bool contient(Vecteur2<T> point){
-		return contient(point.x, point.y);
+	bool contain(Vecteur2<T> point){
+		return contain(point.x, point.y);
 	}
 
 	bool intersecte(Rect<T> rect){
-		if (contient(rect.x, rect.y) || contient(rect.x, rect.y + rect.h) || contient(rect.x + rect.w, rect.y) || contient(rect.x + rect.w, rect.y + rect.h))
+		if (contain(rect.x, rect.y) || contain(rect.x, rect.y + rect.h) || contain(rect.x + rect.w, rect.y) || contain(rect.x + rect.w, rect.y + rect.h))
 			return true;
 		return false;
+	}
+
+	Rect<T> contain(Rect<T> rect) {
+
 	}
 };
 typedef Rect<int> Recti;

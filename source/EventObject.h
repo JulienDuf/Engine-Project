@@ -4,5 +4,5 @@ class EventObject {
 
 public:
 
-	virtual void reactToEvent(SDL_Event*) = 0;
+	virtual bool reactToEvent(SDL_Event*) = 0;
 };

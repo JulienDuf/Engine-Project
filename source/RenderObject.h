@@ -9,10 +9,15 @@ protected:
 
 public:
 
-	virtual void show() = 0;
+	virtual void show(int w, int h) = 0;
 
 
 	Vecteur2f getPosition() {
 		return position;
+	}
+
+	void setPosition(Vecteur2f pos) {
+
+		position = pos;
 	}
 };

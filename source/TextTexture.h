@@ -12,6 +12,10 @@ private:
 
 public:
 
+	TextTexture() {
+		font = nullptr;
+	}
+
 	TextTexture(const char* text, SDL_Color color, Font* font) {
 
 		surface = TTF_RenderText_Blended(font->getFont(), text, color);

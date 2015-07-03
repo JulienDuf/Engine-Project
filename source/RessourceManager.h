@@ -12,8 +12,6 @@ private:
 
 public:
 
-	Window* window;
-
 	void addRessource(std::string name, Ressource* ressource) {
 		
 		if (ressources.find(name) == ressources.end())
@@ -28,5 +26,7 @@ public:
 	Ressource* getRessource(std::string name) {
 		if (ressources.find(name) != ressources.end())
 			return ressources[name];
+		
+		return nullptr;
 	}
 };

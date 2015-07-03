@@ -2,7 +2,6 @@
 #include <list>
 #include "Singleton.h"
 #include "RenderObject.h"
-#include "Event.h"
 
 class RenderManager : public Singleton<RenderManager> {
 
@@ -27,9 +26,9 @@ public:
 			objects.erase(it);
 	}
 
-	void render() {
+	void render(int w, int h) {
 
 		for (auto it : objects)
-			it->show();
+			it->show(w, h);
 	}
 };

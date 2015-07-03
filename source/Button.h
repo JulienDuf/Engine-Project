@@ -1,5 +1,6 @@
 #pragma once
 #include "Sprite.h"
+#include "TextTexture.h"
 #include "Font.h"
 #include "Control.h"
 
@@ -11,7 +12,6 @@ private:
 
 	Sprite* buttonTextures;
 	button_state buttonState;
-	Vecteur2f position;
 	Rectf buttonRect;
 
 public:
@@ -22,20 +22,20 @@ public:
 		EventManager::getInstance().addObject(this);
 	}
 
-	Button(Sprite* textures, Vecteur2f position) : Button() {
+	Button(Sprite* textures) : Button() {
 
 		buttonTextures = textures;
-		this->position = position;
+		this->position = textures->getPosition();
 		buttonState = DEFAULT;
 		buttonRect = Rectf(this->position.x, this->position.y, this->buttonTextures->getWidth(), this->buttonTextures->getHeight());
 
 		RenderManager::getInstance().addObject(buttonTextures);
 	}
 	
-	Button(Sprite* textures, Vecteur2f position, const char* textOnButton, Font* font, SDL_Color color) : Button() {
+	Button(Sprite* textures, const char* textOnButton, Font* font, SDL_Color color) : Button() {
 
 		buttonTextures = textures;
-		this->position = position;
+		this->position = textures->getPosition();
 		buttonState = DEFAULT;
 
 		TextTexture* text = new TextTexture(textOnButton, color, font);
@@ -88,18 +88,18 @@ public:
 		RenderManager::getInstance().removeObject(buttonTextures);
 	}
 
-	void reactToEvent(SDL_Event* event) {
+	bool reactToEvent(SDL_Event* event) {
 		
 		switch (event->type) {
 
 		case SDL_MOUSEMOTION:
 
-			if (buttonRect.contient(event->button.x, event->button.y) && buttonState != CLICKED) {
+			if (buttonRect.contain(event->button.x, event->button.y) && buttonState != CLICKED) {
 				buttonTextures->changeFrame(0, OVERFLOWN);
 				buttonState = OVERFLOWN;
 			}
 			else{
-				if (!buttonRect.contient(event->button.x, event->button.y)) {
+				if (!buttonRect.contain(event->button.x, event->button.y)) {
 					buttonTextures->changeFrame(0, DEFAULT);
 					buttonState = DEFAULT;
 				}
@@ -109,14 +109,14 @@ public:
 
 		case SDL_MOUSEBUTTONDOWN:
 
-			if (buttonRect.contient(event->button.x, event->button.y) && event->button.button == SDL_BUTTON_LEFT) {
+			if (buttonRect.contain(event->button.x, event->button.y) && event->button.button == SDL_BUTTON_LEFT) {
 				buttonTextures->changeFrame(0, CLICKED);
 				buttonState = CLICKED;
 			}
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			if (buttonRect.contient(event->button.x, event->button.y) && event->button.button == SDL_BUTTON_LEFT) {
+			if (buttonRect.contain(event->button.x, event->button.y) && event->button.button == SDL_BUTTON_LEFT) {
 				buttonTextures->changeFrame(0, OVERFLOWN);
 				buttonState = OVERFLOWN;
 			}
@@ -127,6 +127,8 @@ public:
 			break;
 		}
 		if (buttonState != DEFAULT)
-			checkReaction(event->type);
+			return checkReaction(event->type);
+
+		return false;
 	}
 };

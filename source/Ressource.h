@@ -4,4 +4,8 @@ class Ressource{
 
 public:
 
+	virtual ~Ressource() {
+
+	}
+
 };
