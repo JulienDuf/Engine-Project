@@ -9,6 +9,7 @@ class RessourceManager : public Singleton<RessourceManager>{
 private:
 
 	std::map<std::string, Ressource*> ressources;
+	std::list<Ressource*> loadingQueue;
 
 public:
 
@@ -28,5 +29,18 @@ public:
 			return ressources[name];
 		
 		return nullptr;
+	}
+
+	void putRessourceLoading(Ressource* ressource) {
+
+		loadingQueue.push_back(ressource);
+	}
+
+	void laodRessources() {
+
+		for (auto it : loadingQueue)
+			it->load();
+
+		loadingQueue.clear();
 	}
 };

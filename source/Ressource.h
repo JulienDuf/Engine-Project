@@ -8,4 +8,6 @@ public:
 
 	}
 
+	virtual bool load() = 0;
+
 };

@@ -88,11 +88,20 @@ public:
 		text->setPosition(pos);
 	}
 
+	void setText(const char* text) {
+
+		this->text->getTexture()->changeSurface(TTF_RenderText_Blended(this->text->getTexture()->getFont()->getFont(), text, this->text->getTexture()->getColor()));
+	}
+
 	void setBackground(Image* background) {
 
 		RenderManager::getInstance().removeObject(this->background);
 		delete this->background;
 		this->background = background;
 		RenderManager::getInstance().addObject(this->background);
+	}
+
+	Text* getText() {
+		return text;
 	}
 };

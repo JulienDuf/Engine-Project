@@ -7,6 +7,7 @@ class Image : public RenderObject{
 private:
 
 	Texture* texture;
+	Rectf rect;
 
 public:
 
@@ -14,6 +15,7 @@ public:
 
 		this->texture = texture;
 		this->position = position;
+		this->rect = Rectf(position.x, position.y, texture->getSize().x, texture->getSize().y);
 
 	}
 
@@ -27,6 +29,7 @@ public:
 
 		glPushMatrix();
 		glLoadIdentity();
+		glScaled(scale.x, scale.y, 1);
 		glEnable(GL_TEXTURE_2D);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
@@ -57,5 +60,9 @@ public:
 
 	Texture* getTexture() {
 		return texture;
+	}
+
+	Rectf getRect() {
+		return rect;
 	}
 };

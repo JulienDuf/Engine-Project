@@ -32,5 +32,8 @@ public:
 		return this->size;
 	}
 
+	bool load() {
+		return true;
+	}
 
 };

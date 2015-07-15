@@ -23,12 +23,7 @@ public:
 		this->font = font;
 		this->text = text;
 
-		if (surface != nullptr) {
-			glBindTexture(GL_TEXTURE_2D, ID);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		}
+		load();
 	}
 
 	SDL_Color getColor() {
@@ -41,5 +36,13 @@ public:
 
 	const char* getText() {
 		return text;
+	}
+
+	void setText(const char* text) {
+
+		this->text = text;
+		SDL_FreeSurface(surface);
+		surface = TTF_RenderText_Blended(font->getFont(), text, color);
+		reload();
 	}
 };

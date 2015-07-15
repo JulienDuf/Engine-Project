@@ -11,11 +11,11 @@ public:
 
 	Texture() {
 		surface = nullptr;
-		glGenTextures(1, &ID);
+		ID = -1;
 	}
 
 	Texture(const char* path) {
-		glGenTextures(1, &ID);
+		ID = -1;
 		load(path);
 	}
 
@@ -40,6 +40,10 @@ public:
 	}
 
 	bool load() {
+
+		if (ID == -1)
+			glGenTextures(1, &ID);
+
 		if (surface != nullptr){
 			glBindTexture(GL_TEXTURE_2D, ID);
 
@@ -56,9 +60,14 @@ public:
 		return (surface != nullptr);
 	}
 
+	void reload() {
+		glDeleteTextures(1, &ID);
+		load();
+	}
+
 	void changeSurface(SDL_Surface* surface) {
 		this->surface = surface;
-		load();
+		RessourceManager::getInstance().putRessourceLoading(this);
 	}
 
 	GLuint getID(){

@@ -12,7 +12,8 @@
 #pragma comment ( lib,"SDL2_image.lib")
 #pragma comment ( lib,"SDL2_ttf.lib")
 #pragma comment ( lib,"SDL2_mixer.lib")
-#pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
+#pragma comment ( lib,"SDL2_net.lib")
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
 #include <GL\glew.h>
 #include <SDL2\SDL_opengl.h>
@@ -20,8 +21,12 @@
 #include <SDL2\SDL_image.h>
 #include <SDL2\SDL_ttf.h>
 #include <SDL2\SDL_mixer.h>
+#include <SDL2\SDL_net.h>
 #endif
 
+#include "Server.h"
+#include "ServerClient.h"
+#include "Thread.h"
 #include "Engine.h"
 #include "Game.h"
 

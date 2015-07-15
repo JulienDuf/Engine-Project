@@ -30,8 +30,17 @@ public:
 		return false;
 	}
 
-	Rect<T> contain(Rect<T> rect) {
+	bool contain(Rect<T> rect, Rect<T>& result) {
 
+		SDL_Rect rectA = { x, y, w, h };
+		SDL_Rect rectB = { rect.x, rect.y, rect.w, rect.h };
+		SDL_Rect finalRect;
+
+		bool ret = SDL_IntersectRect(&RectA, &rectB, &finalRect);
+
+		result = { finalRect.x, finalRect.y, finalRect.w, finalRect.h };
+
+		return ret;
 	}
 };
 typedef Rect<int> Recti;

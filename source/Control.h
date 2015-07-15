@@ -46,5 +46,9 @@ public:
 		return position;
 	}
 
+	void setPosition(Vecteur2f& pos) {
+		position = pos;
+	}
+
 	virtual bool reactToEvent(SDL_Event*) = 0;
 };

@@ -15,7 +15,7 @@ private:
 	bool activeWindow;
 	Vecteur2ui size;
 
-	std::list<Control*> controls;
+	std::map<const char*, Control*> controls;
 
 public:
 	
@@ -42,30 +42,21 @@ public:
 		EventManager::getInstance().removeObject(this);
 	}
 
-	void addControl(Control* control) {
+	void addControl(const char* name, Control* control) {
 
-		if (std::find(controls.begin(), controls.end(), control) == controls.end())
-			controls.push_back(control);
+		if (controls.find(name) == controls.end())
+			controls[name] = control;
 	}
 
-	void removeControl(Control* control) {
+	void removeControl(const char* name) {
 
-		auto it = std::find(controls.begin(), controls.end(), control);
-
-		if (it != controls.end())
-			controls.erase(it);
+		if (controls.find(name) != controls.end())
+			controls.erase(name);
 	}
 
-	void addControls(int argc, ...) {
-
-		if (argc > 0) {
-			va_list parametres;
-
-			va_start(parametres, argc);
-			for (int i = 0; i < argc; ++i)
-				controls.push_back(va_arg(parametres, Control*));
-			va_end(parametres);
-		}
+	Control* getControl(const char* name) {
+		if (controls.find(name) != controls.end())
+			return controls[name];
 	}
 
 	void clearControls() {
@@ -73,7 +64,7 @@ public:
 		auto it = controls.begin();
 
 		for (int i = controls.size(); i > 0; --i) {
-			delete (*it);
+			delete (*it).second;
 			controls.erase(it);
 			it = controls.begin();
 		}

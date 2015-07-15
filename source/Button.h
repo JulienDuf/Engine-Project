@@ -131,4 +131,25 @@ public:
 
 		return false;
 	}
+
+	bool isOnButton(int x, int y) {
+
+		return buttonRect.contain(x, y);
+	}
+
+	Rectf getRect() {
+
+		return buttonRect;
+	}
+
+	Sprite* getTexture() {
+
+		return buttonTextures;
+	}
+
+	button_state getButtonState() {
+
+		return buttonState;
+	}
+
 };

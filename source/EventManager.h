@@ -36,11 +36,11 @@ public:
 
 		while (SDL_PollEvent(event)) {
 
-			for (auto it : objects)
-				if (it->reactToEvent(event))
-					return;
-
 			Event::update(event);
+
+			for (auto it : objects)
+				if (it->reactToEvent(event)) 
+					return;
 		}
 	}
 };
