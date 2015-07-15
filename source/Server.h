@@ -90,6 +90,7 @@ public:
 
 		if (serverSocketActivity != 0) {
 			if (clientCount < maxClients) {
+
 				
 				int freeSpot = -99;
 				for (unsigned int i = 0; i < maxClients; ++i) {

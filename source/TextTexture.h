@@ -8,7 +8,7 @@ private:
 
 	SDL_Color color;
 	Font* font;
-	const char* text;
+	std::string text;
 
 public:
 
@@ -21,7 +21,7 @@ public:
 		surface = TTF_RenderText_Blended(font->getFont(), text, color);
 		this->color = color;
 		this->font = font;
-		this->text = text;
+		this->text = std::string(text);
 
 		load();
 	}
@@ -35,12 +35,12 @@ public:
 	}
 
 	const char* getText() {
-		return text;
+		return text.c_str();
 	}
 
 	void setText(const char* text) {
 
-		this->text = text;
+		this->text = std::string(text);
 		SDL_FreeSurface(surface);
 		surface = TTF_RenderText_Blended(font->getFont(), text, color);
 		reload();

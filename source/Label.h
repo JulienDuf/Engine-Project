@@ -90,7 +90,7 @@ public:
 
 	void setText(const char* text) {
 
-		this->text->getTexture()->changeSurface(TTF_RenderText_Blended(this->text->getTexture()->getFont()->getFont(), text, this->text->getTexture()->getColor()));
+		this->text->getTexture()->setText(text);
 	}
 
 	void setBackground(Image* background) {
