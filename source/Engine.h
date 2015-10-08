@@ -6,6 +6,9 @@
 #include "RenderManager.h"
 #include "RessourceManager.h"
 #include "TextTexture.h"
+#include "Model.h"
+#include "Shader.h"
+#include "Texture.h"
 #include "SocketException.h"
 
 namespace Engine {
@@ -41,13 +44,23 @@ namespace Engine {
 
 		EventManager::getInstance().checkEvent();
 		window->clearWindow();
+
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		RenderManager::getInstance().render(window->getSize().x, window->getSize().y);
+
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_BLEND);
+
 		window->renderWindow();
 	}
 
 	void createWindow(int w, int h) {
 
 		window = new Window(w, h, "");
+		RenderManager::getInstance().init(w, h);
 	}
 
 	Font* isFontExist(std::string name, const char* path, int size) {
@@ -70,6 +83,17 @@ namespace Engine {
 			RessourceManager::getInstance().addRessource(name, texture);
 		}
 		return texture;
+	}
+
+	Shader* isShaderExist(std::string name, const char* fragPath, const char* vertexPath) {
+
+		Shader* shader = dynamic_cast<Shader*>(RessourceManager::getInstance().getRessource(name));
+
+		if (shader == nullptr) {
+			shader = new Shader(fragPath, vertexPath);
+			RessourceManager::getInstance().addRessource(name, shader);
+		}
+		return shader;
 	}
 
 	void getTextSize(const char* text, Font* font, int &w, int &h) {

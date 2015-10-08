@@ -17,6 +17,7 @@ public:
 	Font(const char* path, int size) {
 
 		font = TTF_OpenFont(path, size);
+
 		this->size = size;
 	}
 
@@ -33,7 +34,8 @@ public:
 	}
 
 	bool load() {
-		return true;
+
+		return (font != nullptr);
 	}
 
 };

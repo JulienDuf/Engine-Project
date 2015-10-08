@@ -13,7 +13,8 @@
 #pragma comment ( lib,"SDL2_ttf.lib")
 #pragma comment ( lib,"SDL2_mixer.lib")
 #pragma comment ( lib,"SDL2_net.lib")
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#pragma comment ( lib,"glew32.lib")
+#pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
 #pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
 #include <GL\glew.h>
 #include <SDL2\SDL_opengl.h>
@@ -22,8 +23,18 @@
 #include <SDL2\SDL_ttf.h>
 #include <SDL2\SDL_mixer.h>
 #include <SDL2\SDL_net.h>
+#elif defined __linux__
+#define GL3_PROTOTYPES 1
+#include <GL3/gl3.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_net.h>
 #endif
 
+#include <algorithm>
 #include "Server.h"
 #include "ServerClient.h"
 #include "Thread.h"

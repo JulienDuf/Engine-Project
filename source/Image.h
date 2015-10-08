@@ -1,8 +1,8 @@
 #pragma once
 #include "Texture.h"
-#include "RenderObject.h"
+#include "RenderObject2D.h"
 
-class Image : public RenderObject{
+class Image : public RenderObject2D{
 
 private:
 
@@ -19,7 +19,7 @@ public:
 
 	}
 
-	void show(int w, int h) {
+	void show(int w, int h, float* camera) {
 
 		glDisable(GL_DEPTH_TEST);
 		glMatrixMode(GL_PROJECTION);

@@ -31,6 +31,10 @@ public:
 
 		glClearColor(255, 25, 255, 255);
 
+#if defined (_WIN32)
+		glewInit();
+#endif
+
 		EventManager::getInstance().addObject(this);
 	}
 

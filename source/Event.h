@@ -18,7 +18,7 @@ struct Keybord {
 struct Mouse {
 
 	Uint32 button;
-	UINT32 state;
+	Uint32 state;
 };
 
 struct Controller {

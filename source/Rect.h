@@ -36,7 +36,7 @@ public:
 		SDL_Rect rectB = { rect.x, rect.y, rect.w, rect.h };
 		SDL_Rect finalRect;
 
-		bool ret = SDL_IntersectRect(&RectA, &rectB, &finalRect);
+		bool ret = SDL_IntersectRect(&rectA, &rectB, &finalRect);
 
 		result = { finalRect.x, finalRect.y, finalRect.w, finalRect.h };
 

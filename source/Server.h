@@ -1,5 +1,6 @@
 #pragma once
 #include "Info.h"
+#include <sstream>
 
 #define SERVER_NOT_FULL "OK"
 #define SERVER_FULL "FULL"
@@ -118,8 +119,11 @@ public:
 			else {
 
 				TCPsocket tempSock = SDLNet_TCP_Accept(serverSocket);
-
+#if defined(_WIN32)
 				strcpy_s(buffer, sizeof(char*), SERVER_FULL);
+#elif defined(__linux__)
+				strcpy(buffer, SERVER_FULL);
+#endif
 				int msgLength = strlen(buffer) + 1;
 				SDLNet_TCP_Send(tempSock, (void *)buffer, msgLength);
 				SDLNet_TCP_Close(tempSock);

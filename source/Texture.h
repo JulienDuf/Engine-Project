@@ -1,6 +1,6 @@
 #pragma once
 #include "Vecteur2.h"
-#include "Ressource.h"
+#include "RessourceManager.h"
 #include <string>
 
 class Texture : public Ressource{

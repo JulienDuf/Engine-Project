@@ -2,9 +2,9 @@
 #include "Texture.h"
 #include "Rect.h"
 #include "Timer.h"
-#include "RenderObject.h"
+#include "RenderObject2D.h"
 
-class Sprite : public RenderObject {
+class Sprite : public RenderObject2D {
 
 private:
 
@@ -37,7 +37,7 @@ public:
 		delete spriteTimer;
 	}
 
-	void show(int w, int h) {
+	void show(int w, int h, float* camera) {
 
 		glDisable(GL_DEPTH_TEST);
 		glMatrixMode(GL_PROJECTION);
