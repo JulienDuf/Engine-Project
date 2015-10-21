@@ -11,7 +11,7 @@ private:
 
 public:
 
-	Image(Texture* texture, Vecteur2f position) {
+	Image(Texture* texture, Vector2f position) {
 
 		this->texture = texture;
 		this->position = position;
@@ -19,7 +19,7 @@ public:
 
 	}
 
-	void show(int w, int h, float* camera) {
+	void show(int w, int h, float* camera, Vector3f pos) {
 
 		glDisable(GL_DEPTH_TEST);
 		glMatrixMode(GL_PROJECTION);

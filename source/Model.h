@@ -29,8 +29,8 @@ public:
 	}
 
 	bool load() {
-		std::ifstream Fichier(path);
-		if (Fichier.is_open()) {
+		std::ifstream file(path);
+		if (file.is_open()) {
 			char *X = new char[255], *Y = new char[255], *Z = new char[255], *temp = new char[255];
 			std::vector<double> tmpVertices;
 			std::queue<double> Vertices;
@@ -39,28 +39,28 @@ public:
 			std::vector<double> tmpNormals;
 			std::queue<double> Normals;
 
-			while (!Fichier.eof())
+			while (!file.eof())
 			{
-				Fichier >> temp;
+				file >> temp;
 				if (temp[0] == '#' || temp[0] == 'o' || temp[0] == 's')
 				{
-					Fichier.getline(temp, 256);
+					file.getline(temp, 256);
 				}
 				else if (temp[0] == 'v')
 				{
 					if (temp[1] == 't') {
-						Fichier >> X >> Y;
+						file >> X >> Y;
 						tmpTextures.push_back(atof(X));
 						tmpTextures.push_back(atof(Y));
 					}
 					else if (temp[1] == 'n') {
-						Fichier >> X >> Y >> Z;
+						file >> X >> Y >> Z;
 						tmpNormals.push_back(atof(X));
 						tmpNormals.push_back(atof(Y));
 						tmpNormals.push_back(atof(Z));
 					}
 					else if (temp[1] == NULL) {
-						Fichier >> X >> Y >> Z;
+						file >> X >> Y >> Z;
 						tmpVertices.push_back(atof(X));
 						tmpVertices.push_back(atof(Y));
 						tmpVertices.push_back(atof(Z));
@@ -69,7 +69,7 @@ public:
 				else if (temp[0] == 'f')
 				{
 
-					Fichier >> X >> Y >> Z;
+					file >> X >> Y >> Z;
 					int it;
 					std::string Ligne, LigneTemp;
 					for (int i = 0; i < 3; i++)
@@ -120,7 +120,7 @@ public:
 					}
 				}
 			}
-			Fichier.close();
+			file.close();
 			nbrVertices = Vertices.size();
 
 			GLfloat number;

@@ -1,37 +1,37 @@
 #pragma once
 #include "RenderObject.h"
-#include "Vecteur2.h"
+#include "Vector2.h"
 
 class RenderObject2D : public RenderObject {
 	
 protected:
 
-	Vecteur2f position;
-	Vecteur2f scale;
+	Vector2f position;
+	Vector2f scale;
 
 public:
 
 	RenderObject2D() {
 
-		scale = Vecteur2f(1, 1);
+		scale = Vector2f(1, 1);
 	}
 
-	virtual void show(int w, int h, float* camera) = 0;
+	virtual void show(int w, int h, float* camera, Vector3f pos) = 0;
 
-	Vecteur2f getPosition() {
+	Vector2f getPosition() {
 		return position;
 	}
 
-	void setPosition(Vecteur2f pos) {
+	void setPosition(Vector2f pos) {
 
 		position = pos;
 	}
 
-	Vecteur2f getScale() {
+	Vector2f getScale() {
 		return scale;
 	}
 
-	void setScale(Vecteur2f scale) {
+	void setScale(Vector2f scale) {
 
 		this->scale = scale;
 	}

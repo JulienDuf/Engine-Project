@@ -16,7 +16,7 @@ private:
 
 public:
 
-	Sprite(Vecteur2f position, Rectf sourceRect, Texture* texture, int wFrames, int hFrames) {
+	Sprite(Vector2f position, Rectf sourceRect, Texture* texture, int wFrames, int hFrames) {
 
 		this->position = position;
 		this->sourceRect = sourceRect;
@@ -28,7 +28,7 @@ public:
 		spriteTimer = nullptr;
 	}
 
-	Sprite(Vecteur2f position, Rectf sourceRect, Texture* texture, int wFrames, int hFrames, int timerTime) : Sprite(position, sourceRect, texture, wFrames, hFrames){
+	Sprite(Vector2f position, Rectf sourceRect, Texture* texture, int wFrames, int hFrames, int timerTime) : Sprite(position, sourceRect, texture, wFrames, hFrames){
 
 		spriteTimer = new Timer(timerTime);
 	}
@@ -37,7 +37,7 @@ public:
 		delete spriteTimer;
 	}
 
-	void show(int w, int h, float* camera) {
+	void show(int w, int h, float* camera, Vector3f pos) {
 
 		glDisable(GL_DEPTH_TEST);
 		glMatrixMode(GL_PROJECTION);

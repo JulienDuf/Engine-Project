@@ -4,6 +4,12 @@
 #include "Shader.h"
 #include "RenderObject3D.h"
 
+struct Light {
+
+	Vector3f position;
+	Vector3f intensities;
+};
+
 class RenderedModel : public RenderObject3D {
 
 private:
@@ -11,6 +17,7 @@ private:
 	Model* model;
 	Shader* shader;
 	Texture* texture;
+	Light light;
 
 	GLuint vertexArrayID;
 	GLuint bufferArrayID;
@@ -24,11 +31,12 @@ public:
 		texture = nullptr;
 	}
 
-	RenderedModel(Model* model, Shader* shader, Texture* texture) {
+	RenderedModel(Model* model, Shader* shader, Texture* texture, Light light) {
 
 		this->model = model;
 		this->texture = texture;
 		this->shader = shader;
+		this->light = light;
 
 		glGenVertexArrays(1, &vertexArrayID);
 		glBindVertexArray(vertexArrayID);
@@ -48,19 +56,20 @@ public:
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, 8 * sizeof(GLfloat), (const GLvoid*)(5 * sizeof(GLfloat)));
 
 		glBindVertexArray(0);
+
 	}
 
-	void show(int w, int h, float* camera) {
+	void show(int w, int h, float* camera, Vector3f pos) {
 
 		shader->use();
 
 		shader->setUniformMatrix4x4("transform", 1, false, transform);
 		shader->setUniformMatrix4x4("camera", 1, false, camera);
+		shader->setUniformVector3("light.position", pos);
+		shader->setUniformVector3("light.intensities", light.intensities);
 
 		glBindTexture(GL_TEXTURE_2D, texture->getID());
 		glBindVertexArray(vertexArrayID);
-
-		glEnable(GL_TEXTURE_2D);
 
 		glDrawArrays(GL_TRIANGLES, 0, model->getNbrFaces());
 

@@ -8,13 +8,15 @@ in vec3 vert;
 in vec2 vertTexCoord;
 in vec3 vertNormal;
 
+out vec3 fragVert;
 out vec2 fragTexCoord;
 out vec3 fragNormal;
 
 void main() {
-    // Pass the tex coord straight through to the fragment shader
+    // Pass some variables to the fragment shader
     fragTexCoord = vertTexCoord;
     fragNormal = vertNormal;
+    fragVert = vert;
 
-    gl_Position = projection * transform * camera * vec4(vert, 1);
+    gl_Position =  projection * camera * transform * vec4(vert, 1);
 }

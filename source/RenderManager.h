@@ -11,16 +11,18 @@ class RenderManager : public Singleton<RenderManager> {
 private:
 
 	std::list<RenderObject*> objects;
-	Camera* camera;
+
 	float projection[16];
 
 public:
+
+	Camera* camera;
 
 	void init(int w, int h) {
 		
 		double hautY, droitX, ratio, angle, planProche, planLoin;
 
-		hautY = 70 * (M_PI / 180);
+		hautY = 30 * (M_PI / 180);
 		ratio = (double)w / (double)h;
 		droitX = hautY * (ratio);
 		planProche = 1;
@@ -33,9 +35,9 @@ public:
 		glMatrixMode(GL_MODELVIEW);
 	}
 
-	void createCamera(Vector3d position, Vector3d target, Vector3d top) {
+	void createCamera(Vector3f position, Vector3f top) {
 
-		camera = new Camera(position, target, top);
+		camera = new Camera(position, top);
 	}
 
 	void addObject(RenderObject* object) {
@@ -53,7 +55,7 @@ public:
 					model->getShader()->stopUse();
 
 					if (camera == nullptr)
-						createCamera(Vector3d(0,0,0), Vector3d(), Vector3d());
+						createCamera(Vector3f(1.32,2.20,-9.82), Vector3f());
 				}
 			}
 		}
@@ -71,9 +73,9 @@ public:
 
 		for (auto it : objects) {
 			if (camera != nullptr)
-				it->show(w, h, camera->getMatrix());
+				it->show(w, h, camera->getMatrix(), camera->getPosition());
 			else
-				it->show(w, h, nullptr);
+				it->show(w, h, nullptr, NULL);
 		}
 	}
 };

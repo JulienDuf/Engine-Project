@@ -10,13 +10,13 @@ private:
 
 public:
 
-	Text(TextTexture* text, Vecteur2f position) {
+	Text(TextTexture* text, Vector2f position) {
 
 		this->text = text;
 		this->position = position;
 	}
 
-	void show(int w, int h, float* camera) {
+	void show(int w, int h, float* camera, Vector3f pos) {
 
 		glDisable(GL_DEPTH_TEST);
 		glMatrixMode(GL_PROJECTION);

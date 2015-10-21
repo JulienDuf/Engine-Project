@@ -1,6 +1,6 @@
 #pragma once
 #include "RenderObject.h"
-#include "Vecteur3.h"
+#include "Vector3.h"
 
 class RenderObject3D : public RenderObject {
 
@@ -22,6 +22,7 @@ protected:
 		glRotated(rotation.z, 0, 0, 1);
 		glScaled(scale.x, scale.y, scale.z);
 		glGetFloatv(GL_MODELVIEW_MATRIX, transform);
+		glPopMatrix();
 	}
 
 public:
@@ -29,11 +30,13 @@ public:
 	RenderObject3D() {
 
 		scale = Vector3d(1,1,1);
+		position = Vector3d();
+		rotation = Vector3d();
 
 		calculMatrix();
 	}
 
-	virtual void show(int w, int h, float* camera) = 0;
+	virtual void show(int w, int h, float* camera, Vector3f pos) = 0;
 
 	Vector3d getPosition() {
 		return position;

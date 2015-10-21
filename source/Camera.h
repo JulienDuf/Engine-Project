@@ -1,36 +1,43 @@
 #pragma once
 #include <math.h>
-#include "Vecteur3.h"
+#include "Vector3.h"
 #include "EventManager.h"
 
-class Camera : public EventObject{
-protected:
-    Vector3d position,
-            cible,
-            haut,
-            cote,
-            devant;
-    double sensibilite;
-    double hAngle;
-    double vAngle;
-    float matriceVue[16];
+class Camera : public EventObject {
 
-    void construireMatrice() {
-        matriceVue[0] = cote.x;
-        matriceVue[1] = cote.y;
-        matriceVue[2] = cote.z;
+private:
 
-        matriceVue[4] = haut.x;
-        matriceVue[5] = haut.y;
-        matriceVue[6] = haut.z;
+    Vector3f position,
+            top,
+            side,
+            front;
+    float sensibility;
+    float hAngle;
+    float vAngle;
+    float viewMatrix[4][4];
+    float matrix[16];
 
-        matriceVue[8] = -devant.x;
-        matriceVue[9] = -devant.y;
-        matriceVue[10] = -devant.z;
+    void buildMatrix() {
+        viewMatrix[0][0] = side.x;
+        viewMatrix[1][0] = side.y;
+        viewMatrix[2][0] = side.z;
+
+        viewMatrix[0][1] = top.x;
+        viewMatrix[1][1] = top.y;
+        viewMatrix[2][1] = top.z;
+
+        viewMatrix[0][2] = -front.x;
+        viewMatrix[1][2] = -front.y;
+        viewMatrix[2][2] = -front.z;
+
+        glLoadIdentity();
+        glMultMatrixf(&viewMatrix[0][0]);
+        glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+        glTranslatef(-position.x, -position.y, -position.z);
+        glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
     }
 
-
-    void calculerVecteurs() {
+    void buildVectors() {
         if (vAngle > 89)
             vAngle = 89;
         if (vAngle < -89)
@@ -41,63 +48,49 @@ protected:
         if (hAngle > 360)
             hAngle -= 360;
 
-        double vAngleRadian = vAngle * M_PI / 180;
-        double hAngleRadian = hAngle * M_PI / 180;
-        double cos_vAngle = cos(vAngleRadian);
+        float vAngleRadian = vAngle * M_PI / 180;
+        float hAngleRadian = hAngle * M_PI / 180;
+        float cos_vAngle = cos(vAngleRadian);
 
-        devant.x = cos_vAngle * sin(hAngleRadian);
-        devant.y = sin(vAngleRadian);
-        devant.z = cos_vAngle * cos(hAngleRadian);
+        front.x = cos_vAngle * sin(hAngleRadian);
+        front.y = sin(vAngleRadian);
+        front.z = cos_vAngle * cos(hAngleRadian);
 
-        devant.normaliser();
+        front.normalize();
 
-        haut = Vector3d(0, 1, 0);
+        top = Vector3f(0, 1, 0);
 
-        cote = devant.produitVectoriel(haut);
-        cote.normaliser();
+        side = front.crossProduct(top);
+        side.normalize();
 
-        haut = cote.produitVectoriel(devant);
-        haut.normaliser();
+        top = side.crossProduct(front);
+        top.normalize();
 
-        construireMatrice();
+        buildMatrix();
     }
-
-    void defCible(Vector3d& cible) {
-        this->cible = cible;
-        construireMatrice();
-    }
-
-    void defHaut(Vector3d& haut) {
-        this->haut = haut;
-        construireMatrice();
-    }
-
-    Vector3d obtCible() { return cible; }
 
 public:
 
-    Camera(Vector3d position, Vector3d target, Vector3d top) {
+    Camera(Vector3f position , Vector3f top) {
         this->position = position;
-        this->cible = target;
-        this->haut = top;
-        matriceVue[3] = matriceVue[7] = matriceVue[11] = matriceVue[12] = matriceVue[13] = matriceVue[14] = 0;
-        matriceVue[15] = 1;
-        construireMatrice();
+        this->top = top;
+        viewMatrix[3][0] = viewMatrix[3][1] = viewMatrix[3][2] = viewMatrix[0][3]= viewMatrix[1][3] = viewMatrix[2][3] = 0;
+        viewMatrix[3][3] = 1;
 
-        this->sensibilite = 0.15;
+        this->sensibility = 0.15;
 
         this->hAngle = 0;
         this->vAngle = 0;
 
-        calculerVecteurs();
+        buildVectors();
 
         EventManager::getInstance().addObject(this);
 
-        //SDL_SetRelativeMouseMode(SDL_TRUE);
-        //SDL_ShowCursor(SDL_DISABLE);
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+        SDL_ShowCursor(SDL_DISABLE);
     }
 
-    Camera() : Camera(Vector3d(), Vector3d(), Vector3d()) {}
+    Camera() : Camera(Vector3f(), Vector3f()) {}
 
     ~Camera() {
         SDL_SetRelativeMouseMode(SDL_FALSE);
@@ -106,17 +99,67 @@ public:
 
     bool reactToEvent(SDL_Event* event) {
 
-        if (event->type == SDL_MOUSEMOTION) {
-            hAngle -= event->motion.xrel * sensibilite;
-            vAngle -= event->motion.yrel * sensibilite;
-            calculerVecteurs();
-            return true;
+        Vector3f vitesse = Vector3f();
+        Vector3f frontTmp = front;
+        Vector3f sideTmp = side;
+
+        frontTmp.y = 0;
+        sideTmp.y = 0;
+
+        switch (event->type) {
+            case SDL_MOUSEMOTION:
+                hAngle -= event->motion.xrel * sensibility;
+                vAngle -= event->motion.yrel * sensibility;
+                buildVectors();
+                break;
+            case SDL_KEYDOWN:
+
+                switch (event->key.keysym.scancode) {
+
+                    case SDL_SCANCODE_S:
+
+                        vitesse = frontTmp * .08;
+                        vitesse.invert();
+                        position += vitesse;
+                        buildVectors();
+                        break;
+
+                    case SDL_SCANCODE_W:
+
+                        vitesse = frontTmp * .08;
+                        position += vitesse;
+                        buildVectors();
+                        break;
+
+                    case SDL_SCANCODE_A:
+
+                        vitesse = sideTmp * .08;
+                        vitesse.invert();
+                        position += vitesse;
+                        buildVectors();
+                        break;
+
+                    case SDL_SCANCODE_D:
+
+                        vitesse = sideTmp * .08;
+                        position += vitesse;
+                        buildVectors();
+                        break;
+                }
+
+                break;
         }
+
         return false;
     }
 
     float* getMatrix() {
 
-        return matriceVue;
+        return matrix;
+    }
+
+    Vector3f getPosition() {
+
+        return position;
     }
 };
