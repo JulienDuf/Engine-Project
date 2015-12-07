@@ -37,7 +37,7 @@ public:
 		RenderManager::getInstance().addObject(text);
 		RenderManager::getInstance().addObject(background);
 
-		Vecteur2f pos;
+		Vector2f pos;
 
 		pos.x = background->getPosition().x + (background->getTexture()->getSurface()->w - text->getTexture()->getSurface()->w) / 2;
 		pos.y = background->getPosition().y + (background->getTexture()->getSurface()->h - text->getTexture()->getSurface()->h) / 2;
@@ -81,7 +81,7 @@ public:
 		this->text = text;
 		RenderManager::getInstance().addObject(this->text);
 
-		Vecteur2f pos;
+		Vector2f pos;
 
 		pos.x = background->getPosition().x + (background->getTexture()->getSurface()->w - text->getTexture()->getSurface()->w) / 2;
 		pos.y = background->getPosition().y + (background->getTexture()->getSurface()->h - text->getTexture()->getSurface()->h) / 2;

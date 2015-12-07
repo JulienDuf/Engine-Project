@@ -5,12 +5,12 @@ class Timer {
 	
 private:
 
-	int duration;
+	float duration;
 	std::chrono::high_resolution_clock::time_point lastTime;
 
 public:
 
-	Timer(int duration) {
+	Timer(float duration) {
 		restart();
 		this->duration = duration;
 	}

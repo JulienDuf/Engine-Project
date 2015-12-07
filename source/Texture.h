@@ -1,5 +1,5 @@
 #pragma once
-#include "Vecteur2.h"
+#include "Vector2.h"
 #include "RessourceManager.h"
 #include <string>
 
@@ -71,11 +71,12 @@ public:
 	}
 
 	GLuint getID(){
+
 		return ID;
 	}
 
-	Vecteur2d getSize() {
-		return Vecteur2d(surface->w, surface->h);
+	Vector2d getSize() {
+		return Vector2d(surface->w, surface->h);
 	}
 
 	SDL_Surface* getSurface() {

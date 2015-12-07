@@ -43,6 +43,6 @@ public:
 		this->text = std::string(text);
 		SDL_FreeSurface(surface);
 		surface = TTF_RenderText_Blended(font->getFont(), text, color);
-		reload();
+		RessourceManager::getInstance().putRessourceLoading(this);
 	}
 };

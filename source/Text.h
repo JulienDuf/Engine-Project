@@ -1,8 +1,8 @@
 #pragma once
 #include "TextTexture.h"
-#include "RenderObject2D.h"
+#include "RenderObject.h"
 
-class Text : public RenderObject2D{
+class Text : public RenderObject {
 
 private:
 	
@@ -16,7 +16,7 @@ public:
 		this->position = position;
 	}
 
-	void show(int w, int h, float* camera, Vector3f pos) {
+	void show(int w, int h) {
 
 		glDisable(GL_DEPTH_TEST);
 		glMatrixMode(GL_PROJECTION);

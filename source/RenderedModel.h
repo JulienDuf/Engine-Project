@@ -1,42 +1,35 @@
 #pragma once
+
+#include <GL3/gl3.h>
 #include "Texture.h"
 #include "Model.h"
 #include "Shader.h"
-#include "RenderObject3D.h"
+#include "SceneObject.h"
 
-struct Light {
-
-	Vector3f position;
-	Vector3f intensities;
-};
-
-class RenderedModel : public RenderObject3D {
+class RenderedModel : public SceneObject {
 
 private:
 
 	Model* model;
-	Shader* shader;
 	Texture* texture;
-	Light light;
 
 	GLuint vertexArrayID;
 	GLuint bufferArrayID;
+
+	GLfloat* modifiedVertices;
 
 public:
 
 	RenderedModel() {
 
 		model = nullptr;
-		shader = nullptr;
 		texture = nullptr;
 	}
 
-	RenderedModel(Model* model, Shader* shader, Texture* texture, Light light) {
+	RenderedModel(Model* model, Texture* texture) {
 
 		this->model = model;
 		this->texture = texture;
-		this->shader = shader;
-		this->light = light;
 
 		glGenVertexArrays(1, &vertexArrayID);
 		glBindVertexArray(vertexArrayID);
@@ -57,34 +50,39 @@ public:
 
 		glBindVertexArray(0);
 
+//        modifiedVertices = new GLfloat[model->getNbrVertices()];
+//
+//        int end = (int) (model->sizeofModel() / sizeof(GLfloat));
+//        unsigned int pos = 0;
+//        GLfloat* modelArray = model->getModel();
+//
+//        for (int i = 0; i < end; ) {
+//
+//            for (int j = 0; j < 3; ++j)
+//                modifiedVertices[pos++] = modelArray[i++];
+//
+//            i += 5;
+//        }
+
 	}
 
-	void show(int w, int h, float* camera, Vector3f pos) {
+	void show(bool shadowMAP) {
 
-		shader->use();
+		if (!shadowMAP) {
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texture->getID());
+		}
 
-		shader->setUniformMatrix4x4("transform", 1, false, transform);
-		shader->setUniformMatrix4x4("camera", 1, false, camera);
-		shader->setUniformVector3("light.position", pos);
-		shader->setUniformVector3("light.intensities", light.intensities);
-
-		glBindTexture(GL_TEXTURE_2D, texture->getID());
 		glBindVertexArray(vertexArrayID);
 
 		glDrawArrays(GL_TRIANGLES, 0, model->getNbrFaces());
 
 		glBindVertexArray(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		shader->stopUse();
 	}
 
 	Texture* getTexture() {
 
 		return texture;
-	}
-
-	Shader* getShader() {
-
-		return shader;
 	}
 };

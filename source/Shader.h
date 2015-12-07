@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include "Ressource.h"
+#include "Vector3.h"
 
 class Shader : public Ressource{
 
@@ -39,7 +40,7 @@ private:
 		std::string sourceCode;
 
 		while (getline(fichier, line))
-			sourceCode += line + '\n';
+			sourceCode += (line + "\n");
 
 		fichier.close();
 		const GLchar* chainCodeSource = sourceCode.c_str();
@@ -59,6 +60,12 @@ private:
 
 			glGetShaderInfoLog(shader, errorSize, &errorSize, error);
 			error[errorSize] = '\0';
+
+			if (type == GL_VERTEX_SHADER)
+				std::cout << "Vertex shader errors :" << std::endl;
+
+			else if (type == GL_FRAGMENT_SHADER)
+				std::cout << "Fragment shader errors :" << std::endl;
 
 			std::cout << error << std::endl;
 
@@ -124,31 +131,29 @@ public:
 		glAttachShader(programID, vertexID);
 		glAttachShader(programID, fragmentID);
 
-		/*glBindAttribLocation(programID, 0, "in_Vertex");
-		glBindAttribLocation(programID, 1, "in_Color");
-		glBindAttribLocation(programID, 2, "in_TexCoord0");*/
-
 		glLinkProgram(programID);
 
-		GLint linkErreur(0);
-		glGetProgramiv(programID, GL_LINK_STATUS, &linkErreur);
+		GLint linkError(0);
+		glGetProgramiv(programID, GL_LINK_STATUS, &linkError);
 
-		if (linkErreur != GL_TRUE)	{
+		if (linkError != GL_TRUE)	{
 
-			GLint errorSize(0);
-			glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &errorSize);
+			GLint maxLength = 0;
+			glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &maxLength);
 
-			char *error = new char[errorSize + 1];
-			glGetShaderInfoLog(programID, errorSize, &errorSize, error);
-			error[errorSize] = '\0';
+			std::vector<GLchar> infoLog(maxLength);
+			glGetProgramInfoLog(programID, maxLength, &maxLength, &infoLog[0]);
 
-			std::cout << error << std::endl;
+			for (auto info : infoLog)
+				std::cout << info;
 
-			delete[] error;
 			glDeleteProgram(programID);
 
 			return false;
 		}
+
+		GLint iigif = glGetUniformLocation(programID, "shadowMap");
+		GLint grefd = glGetUniformLocation(programID, "tex");
 
 		return true;
 	}
@@ -170,6 +175,22 @@ public:
 	void setUniformMatrix4x4(const GLchar* uniformName, GLsizei count, GLboolean transpose, GLfloat* matrix) {
 
 		glUniformMatrix4fv(getUniform(uniformName), count, transpose, matrix);
+	}
+
+	void setUniformVector3(const GLchar* uniformName, Vector3f vector) {
+
+		GLfloat v[] = {vector.x, vector.y, vector.z};
+		glUniform3fv(getUniform(uniformName), 1, &v[0]);
+	}
+
+	void setUniformInt(const GLchar* uniformName, int value) {
+
+		glUniform1i(getUniform(uniformName), value);
+	}
+
+	void setUniformFloat(const GLchar* uniformName, float value) {
+
+		glUniform1f(getUniform(uniformName), value);
 	}
 
 	void use() {

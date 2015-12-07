@@ -15,7 +15,7 @@ private:
     float hAngle;
     float vAngle;
     float viewMatrix[4][4];
-    float matrix[16];
+    Mat4 matrix;
 
     void buildMatrix() {
         viewMatrix[0][0] = side.x;
@@ -32,9 +32,8 @@ private:
 
         glLoadIdentity();
         glMultMatrixf(&viewMatrix[0][0]);
-        glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
         glTranslatef(-position.x, -position.y, -position.z);
-        glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+        glGetFloatv(GL_MODELVIEW_MATRIX, matrix.matrix);
     }
 
     void buildVectors() {
@@ -48,13 +47,13 @@ private:
         if (hAngle > 360)
             hAngle -= 360;
 
-        float vAngleRadian = vAngle * M_PI / 180;
-        float hAngleRadian = hAngle * M_PI / 180;
-        float cos_vAngle = cos(vAngleRadian);
+        float vAngleRadian = (float) (vAngle * M_PI / 180);
+        float hAngleRadian = (float) (hAngle * M_PI / 180);
+        float cos_vAngle = (float) cos(vAngleRadian);
 
-        front.x = cos_vAngle * sin(hAngleRadian);
-        front.y = sin(vAngleRadian);
-        front.z = cos_vAngle * cos(hAngleRadian);
+        front.x = (float) (cos_vAngle * sin(hAngleRadian));
+        front.y = (float) sin(vAngleRadian);
+        front.z = (float) (cos_vAngle * cos(hAngleRadian));
 
         front.normalize();
 
@@ -103,9 +102,6 @@ public:
         Vector3f frontTmp = front;
         Vector3f sideTmp = side;
 
-        frontTmp.y = 0;
-        sideTmp.y = 0;
-
         switch (event->type) {
             case SDL_MOUSEMOTION:
                 hAngle -= event->motion.xrel * sensibility;
@@ -145,15 +141,19 @@ public:
                         position += vitesse;
                         buildVectors();
                         break;
+
+                    default:
+                        break;
                 }
 
                 break;
+            default:break;
         }
 
         return false;
     }
 
-    float* getMatrix() {
+    Mat4& getMatrix() {
 
         return matrix;
     }

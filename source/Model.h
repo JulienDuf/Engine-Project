@@ -32,50 +32,47 @@ public:
 		std::ifstream file(path);
 		if (file.is_open()) {
 			char *X = new char[255], *Y = new char[255], *Z = new char[255], *temp = new char[255];
-			std::vector<double> tmpVertices;
-			std::queue<double> Vertices;
-			std::vector<double> tmpTextures;
-			std::queue<double> Textures;
-			std::vector<double> tmpNormals;
-			std::queue<double> Normals;
+			std::vector<GLfloat> tmpVertices;
+			std::queue<GLfloat> Vertices;
+			std::vector<GLfloat> tmpTextures;
+			std::queue<GLfloat> Textures;
+			std::vector<GLfloat> tmpNormals;
+			std::queue<GLfloat> Normals;
 
-			while (!file.eof())
-			{
+			while(!file.eof()) {
+
 				file >> temp;
-				if (temp[0] == '#' || temp[0] == 'o' || temp[0] == 's')
-				{
+				if(temp[0] == '#' || temp[0] == 'o' || temp[0] == 's') {
 					file.getline(temp, 256);
 				}
-				else if (temp[0] == 'v')
-				{
-					if (temp[1] == 't') {
+
+				else if(temp[0] == 'v') {
+					if(temp[1] == 't') {
 						file >> X >> Y;
-						tmpTextures.push_back(atof(X));
-						tmpTextures.push_back(atof(Y));
+						tmpTextures.push_back((float &&) atof(X));
+						tmpTextures.push_back((float &&) atof(Y));
 					}
-					else if (temp[1] == 'n') {
+					else if(temp[1] == 'n') {
 						file >> X >> Y >> Z;
-						tmpNormals.push_back(atof(X));
-						tmpNormals.push_back(atof(Y));
-						tmpNormals.push_back(atof(Z));
+						tmpNormals.push_back((float &&) atof(X));
+						tmpNormals.push_back((float &&) atof(Y));
+						tmpNormals.push_back((float &&) atof(Z));
 					}
-					else if (temp[1] == NULL) {
+					else if(temp[1] == NULL) {
 						file >> X >> Y >> Z;
-						tmpVertices.push_back(atof(X));
-						tmpVertices.push_back(atof(Y));
-						tmpVertices.push_back(atof(Z));
+						tmpVertices.push_back((float &&) atof(X));
+						tmpVertices.push_back((float &&) atof(Y));
+						tmpVertices.push_back((float &&) atof(Z));
 					}
 				}
-				else if (temp[0] == 'f')
-				{
+
+				else if(temp[0] == 'f') {
 
 					file >> X >> Y >> Z;
 					int it;
 					std::string Ligne, LigneTemp;
-					for (int i = 0; i < 3; i++)
-					{
-						switch (i)
-						{
+					for(int i = 0; i < 3; i++) {
+						switch(i) {
 							case 0:
 								LigneTemp = X;
 								break;
@@ -86,31 +83,29 @@ public:
 								LigneTemp = Z;
 								break;
 						}
+
 						LigneTemp.append("/");
-						for (int j = 0; j < 3; j++)
-						{
+						for(int j = 0; j < 3; j++) {
 							Ligne = LigneTemp;
 							it = 0;
 
-							while (Ligne[it] != '/')
+							while(Ligne[it] != '/')
 								it++;
 
 							Ligne.erase(it, Ligne.length());
 
-							if (Ligne[0] != NULL)
-							{
-								switch (j)
-								{
+							if(Ligne[0] != NULL) {
+								switch(j) {
 									case 0:
-										for (int k = 0; k < 3; k++)
+										for(int k = 0; k < 3; k++)
 											Vertices.push(tmpVertices[(atoi(Ligne.c_str()) - 1) * 3 + k]);
 										break;
 									case 1:
-										for (int k = 0; k < 2; k++)
+										for(int k = 0; k < 2; k++)
 											Textures.push(tmpTextures[(atoi(Ligne.c_str()) - 1) * 2 + k]);
 										break;
 									case 2:
-										for (int k = 0; k < 3; k++)
+										for(int k = 0; k < 3; k++)
 											Normals.push(tmpNormals[(atoi(Ligne.c_str()) - 1) * 3 + k]);
 										break;
 								}
@@ -121,11 +116,11 @@ public:
 				}
 			}
 			file.close();
-			nbrVertices = Vertices.size();
+			nbrVertices = (unsigned int) Vertices.size();
 
-			GLfloat number;
+			GLfloat number = 0;
 
-			int end = (Vertices.size() + Textures.size() + Normals.size());
+			int end = (int) (Vertices.size() + Textures.size() + Normals.size());
 
 			model = new GLfloat[end];
 
@@ -156,11 +151,12 @@ public:
 							number = Normals.front();
 							Normals.pop();
 							break;
+						default:break;
 					}
 					model[i + j] = number;
 				}
 			}
-			size = sizeof(model) * end;
+			size = (int) (sizeof(model) * end);
 			return true;
 		}
 		return false;

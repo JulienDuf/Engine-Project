@@ -1,5 +1,5 @@
 #pragma once 
-#include "Vecteur2.h"
+#include "Vector2.h"
 
 template<class T>
 class Rect{
@@ -20,7 +20,7 @@ public:
 		return estDansX && estDansY;
 	}
 
-	bool contain(Vecteur2<T> point){
+	bool contain(Vector2<T> point){
 		return contain(point.x, point.y);
 	}
 

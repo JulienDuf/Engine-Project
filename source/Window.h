@@ -3,7 +3,7 @@
 #include <list>
 #include <stdarg.h>
 #include "EventObject.h"
-#include "Vecteur2.h"
+#include "Vector2.h"
 #include "Control.h"
 
 class Window : public EventObject{
@@ -13,28 +13,31 @@ private:
 	SDL_GLContext windowContext;
 
 	bool activeWindow;
-	Vecteur2ui size;
+	bool fullScreen;
+	bool boderLess;
+	Vector2ui size;
 
-	std::map<const char*, Control*> controls;
+	std::map<std::string, Control*> controls;
 
 public:
 	
-	Window(int w, int h, const char* name) {
+	Window(unsigned int w, unsigned int h, const char* name) {
+
+		fullScreen = false;
+		boderLess = false;
 
 		window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_OPENGL | SDL_RENDERER_PRESENTVSYNC);
 		windowContext = SDL_GL_CreateContext(window);
 		activeWindow = true;
-		size = Vecteur2ui(w, h);
+		size = Vector2ui(w, h);
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-
-		glClearColor(255, 25, 255, 255);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+		SDL_GL_MakeCurrent(window, windowContext);
 
 #if defined (_WIN32)
 		glewInit();
 #endif
-
 		EventManager::getInstance().addObject(this);
 	}
 
@@ -92,14 +95,38 @@ public:
 		SDL_GL_SwapWindow(window);
 	}
 
-	void setWindowSize(Vecteur2ui size) {
+	void setWindowSize(Vector2ui size) {
 
 		this->size = size;
 		SDL_SetWindowSize(window, size.x, size.y);
 		glViewport(0, 0, size.x, size.y);
 	}
 
-	Vecteur2ui getSize() {
+	void setWindowFullScreen() {
+
+		fullScreen = true;
+		boderLess = false;
+
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	}
+
+	void setWindowBorderLess() {
+
+		fullScreen = false;
+		boderLess = true;
+
+		SDL_SetWindowBordered(window, SDL_FALSE);
+	}
+
+	void setWindowBordered() {
+
+		fullScreen = false;
+		boderLess = true;
+
+		SDL_SetWindowBordered(window, SDL_TRUE);
+	}
+
+	Vector2ui getSize() {
 
 		return size;
 	}
@@ -107,10 +134,17 @@ public:
 	bool reactToEvent(SDL_Event* event) {
 
 		switch (event->type) {
-		case SDL_QUIT:
-			activeWindow = false;
-			return true;
-			break;
+			case SDL_QUIT:
+				activeWindow = false;
+				return true;
+
+			case SDL_KEYDOWN:
+
+				if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+					activeWindow = false;
+					return true;
+				}
+			default:break;
 		}
 		return false;
 	}

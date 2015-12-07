@@ -7,7 +7,7 @@ private:
 
 	Image* container;
 	std::vector<Text*> texts;
-	Vecteur2f nextTextPosition;
+	Vector2f nextTextPosition;
 	Font* font;
 
 	bool isTextOk(const char* text) {

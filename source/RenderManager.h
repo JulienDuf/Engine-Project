@@ -2,9 +2,9 @@
 #include <list>
 #include "Singleton.h"
 #include "RenderObject.h"
-#include "RenderObject2D.h"
 #include "RenderedModel.h"
 #include "Camera.h"
+#include "Scene.h"
 
 class RenderManager : public Singleton<RenderManager> {
 
@@ -12,7 +12,9 @@ private:
 
 	std::list<RenderObject*> objects;
 
-	float projection[16];
+	std::list<Scene*> scenes;
+
+	Mat4 projection;
 
 public:
 
@@ -28,11 +30,8 @@ public:
 		planProche = 1;
 		planLoin = 100;
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glFrustum(-droitX, droitX, -hautY, hautY, planProche, planLoin);
-		glGetFloatv(GL_PROJECTION_MATRIX, projection);
-		glMatrixMode(GL_MODELVIEW);
+		projection = Math::perspective(-droitX, droitX, -hautY, hautY, planProche, planLoin);
+
 	}
 
 	void createCamera(Vector3f position, Vector3f top) {
@@ -42,22 +41,19 @@ public:
 
 	void addObject(RenderObject* object) {
 
-		if (std::find(objects.begin(), objects.end(), object) == objects.end()) {
-			RenderObject2D* tmp = dynamic_cast<RenderObject2D*>(object);
-			if (tmp != nullptr)
-				objects.push_back(object);
-			else {
-				objects.push_front(object);
-				RenderedModel* model = dynamic_cast<RenderedModel*>(object);
-				if (model != nullptr) {
-					model->getShader()->use();
-					model->getShader()->setUniformMatrix4x4("projection", 1, false, projection);
-					model->getShader()->stopUse();
+		if (std::find(objects.begin(), objects.end(), object) == objects.end())
+			objects.push_back(object);
 
-					if (camera == nullptr)
-						createCamera(Vector3f(1.32,2.20,-9.82), Vector3f());
-				}
-			}
+	}
+
+	void addScene(Scene* scene) {
+
+		if (std::find(scenes.begin(), scenes.end(), scene) == scenes.end()) {
+			scenes.push_back(scene);
+
+			if (camera == nullptr)
+				createCamera(Vector3f(0, 22.20, 0), Vector3f(0,1,0));
+
 		}
 	}
 
@@ -69,13 +65,21 @@ public:
 			objects.erase(it);
 	}
 
+	void removeScene(Scene* object) {
+
+		auto it = std::find(scenes.begin(), scenes.end(), object);
+
+		if (it != scenes.end())
+			scenes.erase(it);
+	}
+
 	void render(int w, int h) {
 
-		for (auto it : objects) {
-			if (camera != nullptr)
-				it->show(w, h, camera->getMatrix(), camera->getPosition());
-			else
-				it->show(w, h, nullptr, NULL);
-		}
+		for (auto item : scenes)
+			item->show(camera->getMatrix(), projection);
+
+		for (auto it : objects)
+			it->show(w, h);
+
 	}
 };

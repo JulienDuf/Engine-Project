@@ -39,7 +39,7 @@ public:
 		buttonState = DEFAULT;
 
 		TextTexture* text = new TextTexture(textOnButton, color, font);
-		SDL_Rect surfacePosition = {(buttonTextures->getWidth() - text->getSurface()->w) / 2, (buttonTextures->getHeight() - text->getSurface()->h) / 2, 0, 0 };
+		SDL_Rect surfacePosition = {(int) ((buttonTextures->getWidth() - text->getSurface()->w) / 2), (int) ((buttonTextures->getHeight() - text->getSurface()->h) / 2), 0, 0 };
 		SDL_Surface* surface = buttonTextures->getTexture()->getSurface();
 
 		for (int i = 0; i < 3; ++i) {
@@ -52,7 +52,7 @@ public:
 		RenderManager::getInstance().addObject(buttonTextures);
 	}
 
-	Button(Vecteur2f position, const char* buttonText, Font* font, SDL_Color defaultColor, SDL_Color ovreflownColor, SDL_Color clickedColor) : Button() {
+	Button(Vector2f position, const char* buttonText, Font* font, SDL_Color defaultColor, SDL_Color ovreflownColor, SDL_Color clickedColor) : Button() {
 
 		TextTexture* text = new TextTexture(buttonText, defaultColor, font);
 		SDL_Surface* finalSurface = SDL_CreateRGBSurface(text->getSurface()->flags, text->getSurface()->w, text->getSurface()->h * 3, 32, 0, 0, 0, 0);

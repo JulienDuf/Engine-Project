@@ -29,7 +29,7 @@ private:
 			textInBox->getTexture()->setText(drawText.c_str());
 		}
 		
-		textInBox->setPosition(Vecteur2f((textBox->getPosition().x + 10), textBox->getRect().y + ((textBox->getRect().h - textInBox->getTexture()->getSize().y) / 2)));
+		textInBox->setPosition(Vector2f((textBox->getPosition().x + 10), textBox->getRect().y + ((textBox->getRect().h - textInBox->getTexture()->getSize().y) / 2)));
 
 	}
 
@@ -40,7 +40,7 @@ public:
 		this->textBox = box;
 		text = std::string(" ");
 		noLetter = true;
-		textInBox = new Text(new TextTexture(" ", { 0, 0, 0, 0 }, font), Vecteur2f((box->getPosition().x + 5), (box->getRect().y + box->getRect().h) / 2));
+		textInBox = new Text(new TextTexture(" ", { 0, 0, 0, 0 }, font), Vector2f((box->getPosition().x + 5), (box->getRect().y + box->getRect().h) / 2));
 		active = false;
 
 		position = textBox->getPosition();
@@ -64,7 +64,7 @@ public:
 
 		char* textTmp = nullptr;
 		std::string accent;
-		accent.append("Ã");
+		accent.append("ï¿½");
 		accent.push_back(-96);
 
 		SDL_StartTextInput();
@@ -75,25 +75,25 @@ public:
 			if (active) {
 
 				if (!strcmp(event->text.text, "Ã©"))
-					textTmp = "é";
+					textTmp = "ï¿½";
 				else if (!strcmp(event->text.text, "Ã‰"))
-					textTmp = "É";
+					textTmp = "ï¿½";
 				else if (!strcmp(event->text.text, "Ã¨"))
-					textTmp = "è";
+					textTmp = "ï¿½";
 				else if (!strcmp(event->text.text, "Ãˆ"))
-					textTmp = "È";
+					textTmp = "ï¿½";
 				else if (!strcmp(event->text.text, accent.c_str()))
-					textTmp = "à";
+					textTmp = "ï¿½";
 				else if (!strcmp(event->text.text, "Ã€"))
-					textTmp = "À";
+					textTmp = "ï¿½";
 				else if (!strcmp(event->text.text, "Ã§"))
-					textTmp = "ç";
+					textTmp = "ï¿½";
 				else if (!strcmp(event->text.text, "Ã‡"))
-					textTmp = "Ç";
+					textTmp = "ï¿½";
 				else if (!strcmp(event->text.text, "Ãª"))
-					textTmp = "ê";
+					textTmp = "ï¿½";
 				else if (!strcmp(event->text.text, "ÃŠ"))
-					textTmp = "Ê";
+					textTmp = "ï¿½";
 				else
 					textTmp = event->text.text;
 				if (noLetter) {

@@ -24,7 +24,7 @@ public:
 		position = background->getPosition();
 
 		int distance = bottomArrow->getPosition().y - (topArrow->getPosition().y + topArrow->getRect().h);
-		scrollBar->getTexture()->setScale(Vecteur2f(1, scrollBar->getRect().h / distance));
+		scrollBar->getTexture()->setScale(Vector2f(1, scrollBar->getRect().h / distance));
 	}
 
 	bool reactToEvent(SDL_Event* event) {

@@ -10,7 +10,7 @@ private:
 
 protected:
 
-	Vecteur2f position;
+	Vector2f position;
 
 public:
 
@@ -42,11 +42,11 @@ public:
 		return false;
 	}
 
-	Vecteur2f getPosition() {
+	Vector2f getPosition() {
 		return position;
 	}
 
-	void setPosition(Vecteur2f& pos) {
+	void setPosition(Vector2f& pos) {
 		position = pos;
 	}
 

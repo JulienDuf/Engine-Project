@@ -1,8 +1,11 @@
 #pragma once
-#include "Texture.h"
-#include "RenderObject2D.h"
 
-class Image : public RenderObject2D{
+#include <GL/gl.h>
+#include "Texture.h"
+#include "RenderObject.h"
+#include "Rect.h"
+
+class Image : public RenderObject {
 
 private:
 
@@ -15,11 +18,11 @@ public:
 
 		this->texture = texture;
 		this->position = position;
-		this->rect = Rectf(position.x, position.y, texture->getSize().x, texture->getSize().y);
+		this->rect = Rectf(position.x, position.y, (float) texture->getSize().x, (float) texture->getSize().y);
 
 	}
 
-	void show(int w, int h, float* camera, Vector3f pos) {
+	void show(int w, int h) {
 
 		glDisable(GL_DEPTH_TEST);
 		glMatrixMode(GL_PROJECTION);
